@@ -21,7 +21,7 @@ A hands-on SOC investigation lab using **Splunk SIEM** to detect, analyze, and r
 
 ## 🚀 Quick Start
 1. **Clone this repository**
-2. **Review** `incident-report/INCIDENT-2024-001.md`
+2. **Review** `incident-report/INCIDENT-2026-001.md`
 3. **Import queries** into your Splunk instance
 4. **Follow along** with the investigation steps
 
@@ -32,7 +32,7 @@ splunk-incident-response-lab/
 ├── incident-report/ # Complete incident narrative
 ├── queries/ # Splunk SPL detection queries
 ├── dashboards/ # SOC dashboard configurations
-├── screenshots/ # Splunk interface screenshots
+├── screenshot/ # Splunk interface screenshots
 ├── sample-data/ # Simulated log files (optional)
 └── docs/ # Additional documentation
 ```
