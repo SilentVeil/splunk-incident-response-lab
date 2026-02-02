@@ -10,33 +10,43 @@
 ## 🎯 Incident Timeline
 | Time (UTC) | Event | Evidence |
 |------------|-------|----------|
-| 08:15 | First failed login attempt | Splunk: `EventCode=4625` |
-| 08:20-08:45 | Brute force attack (500+ attempts) | Firewall logs, Splunk alert |
-| 08:50 | Successful login (compromised admin creds) | `EventCode=4624` |
-| 09:05 | Privilege escalation detected | Domain Admin events (4728, 4732) |
-| 09:15 | Data exfiltration begins | Large outbound transfer detected |
-| 09:30 | SOC alerted, investigation starts | Splunk dashboard trigger |
-| 09:45 | Containment actions taken | Hosts isolated, creds reset |
-| 10:00 | Incident contained | No further malicious activity |
+| 10:30 AM | HACKER01 added to Domain Admins (4728) | Windows Security Log |
+| 10:31 AM | HACKER01 added to Administrators (4732) | Windows Security Log |
+| 10:32 AM | HACKER01 added to Enterprise Admins (4756) | Windows Security Log |
+| 10:40 AM | runas.exe executed as Administrator (4688) | Windows Process Creation |
+| 14:00 PM | Linux: hacker01 gains root via sudo bash | Linux Sudo Logs |
+| 14:01 PM | Linux: hacker01 changes root password | Linux Sudo Logs |
+| 14:02 PM | Linux: hacker01 creates backdoor user | Linux Sudo Logs |
+| 14:04 PM | Linux: hacker01 reads /etc/shadow file | Linux Sudo Logs |
+
 
 ## 🔍 Detection & Investigation
 
-### 1. Brute Force Attack Detection
+### 1. Windows Privilege Escalation Detection
 **Splunk Query:**
 ```splunk
-index=windows EventCode=4625 
-| stats count by IpAddress, TargetUserName 
-| where count > 20
+source= ("Domain Admin" OR "4728" OR "4732" OR "4756" OR "runas.exe")
+| table _time, host, EventID, Message
+
+Finding: Within 2 minutes (10:30-10:32 AM), user HACKER01 was added to:
+- Domain Admins (Event ID 4728 at 10:30 AM)
+- Administrators group (4732 at 10:31 AM)  
+- Enterprise Admins (4756 at 10:32 AM)
+- Followed by `runas.exe` execution as Administrator (4688 at 10:40 AM)
 ```
 **Finding:** 523 failed login attempts from IP `185.153.196.42` to `admin` account.
 
-### 2. Privilege Escalation Detection  
+### 2. Linux Privilege Escalation Detection
 **Splunk Query:**
 ```splunk
-(source="*" ("Domain Admin" OR "4728" OR "4732" OR "4756" OR "runas.exe" OR "PsExec"))
-OR (source="*linux*" "sudo:" ("/bin/bash" OR "passwd" OR "useradd" OR "shadow"))
-| stats count as suspicious_events by host
-| where suspicious_events > 0
+source="linux" "sudo:" ("/bin/bash" OR "passwd" OR "useradd" OR "shadow")
+| table _time, host, user, command
+
+Finding: Within 4 minutes (14:00-14:04 PM), user hacker01 executed as root:
+- `/bin/bash` at 14:00 (gained root shell)
+- `/usr/bin/passwd root` at 14:01 (changed root password)
+- `/usr/sbin/useradd backdoor` at 14:02 (created persistence account)
+- `/bin/cat /etc/shadow` at 14:04 (stole password hashes)
 ```
 **Finding:** Privilege escalation detected on `DC01` (4 events) and `Linux-server01` (4 events).
 
@@ -45,9 +55,9 @@ OR (source="*linux*" "sudo:" ("/bin/bash" OR "passwd" OR "useradd" OR "shadow"))
 ```splunk
 index=proxy_logs dest_ip=185.153.196.42
 | stats sum(bytes) as total_bytes
-| where total_bytes > 100000000
+| where total_bytes > 10000000
 ```
-**Finding:** 150MB of data transferred to attacker's IP.
+**Finding:** 10.5MB of sensitive data transferred to attacker's IP starting at 14:30 PM.
 
 ## 📸 Forensic Evidence
 
