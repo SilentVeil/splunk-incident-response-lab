@@ -49,6 +49,13 @@ index=proxy_logs dest_ip=185.153.196.42
 ```
 **Finding:** 150MB of data transferred to attacker's IP.
 
+## 📸 Forensic Evidence
+
+### Splunk Query Results - Privilege Escalation Detection
+![Privilege Escalation Detection Results](screenshots/privilege-escalation-detection.png)
+
+*Figure 1: Splunk detection query showing privilege escalation events across Windows and Linux systems.*
+
 ## 🛡️ Containment Actions
 1. **Immediate:**
    - Isolated affected servers from network
