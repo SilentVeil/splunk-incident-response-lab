@@ -52,9 +52,9 @@ index=proxy_logs dest_ip=185.153.196.42
 ## 📸 Forensic Evidence
 
 ### Splunk Query Results - Privilege Escalation Detection
-![Privilege Escalation Detection Results](screenshots/privilege-escalation-detection.png)
-
-*Figure 1: Splunk detection query showing privilege escalation events across Windows and Linux systems.*
+![Privilege Escalation Detection](screenshot/privilege-escalation-detection1.png)
+![Privilege Escalation Detection](screenshot/privilege-escalation-detection2.png)
+*Figure : Splunk detection query showing privilege escalation events across Windows and Linux systems.*
 
 ## 🛡️ Containment Actions
 1. **Immediate:**
