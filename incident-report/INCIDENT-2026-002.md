@@ -50,7 +50,7 @@ Finding: Within 4 minutes (14:00-14:04 PM), user hacker01 executed as root:
 ```
 **Finding:** Privilege escalation detected on `DC01` (4 events) and `Linux-server01` (4 events).
 
-### 3. Data Theft Detection
+### 3. Data Exfiltration Detection
 **Splunk Query:**
 ```splunk
 index=proxy_logs dest_ip=185.153.196.42
