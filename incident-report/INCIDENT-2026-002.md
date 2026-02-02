@@ -1,7 +1,7 @@
 # 🚨 SECURITY INCIDENT REPORT - IR-2026-001
 
 ## 📋 Executive Summary
-**Date:** 2026-30-01  
+**Date:** 2026-01-30  
 **Severity:** High  
 **Status:** Contained  
 **Affected Systems:** Web Server (192.168.1.100), Domain Controller (DC01), Linux Server (Linux-server01)  
@@ -87,7 +87,7 @@ index=proxy_logs dest_ip=185.153.196.42
 4. Conduct tabletop exercises quarterly
 
 ---
-**Report Generated:** 2026-30-01  
+**Report Generated:** 2026-01-30  
 **Investigator:** Renaldi  
 **SOC Team:** Blue Team Alpha  
 **Tools Used:** Splunk SIEM, Wireshark, VirusTotal
